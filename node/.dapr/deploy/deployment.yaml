@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeapp
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodeapp
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        dapr.io/app-id: nodeapp
+        dapr.io/app-port: "3000"
+        dapr.io/config: appconfig
+        dapr.io/enabled: "true"
+        dapr.io/metrics-port: "37389"
+        dapr.io/unix-domain-socket-path: ""
+      creationTimestamp: null
+      labels:
+        app: nodeapp
+    spec:
+      containers:
+      - env:
+        - name: APP_ID
+          value: nodeapp
+        - name: APP_CHANNEL_ADDRESS
+        - name: APP_PORT
+          value: "3000"
+        - name: DAPR_METRICS_PORT
+          value: "37389"
+        image: ghcr.io/dapr/samples/hello-k8s-node:latest
+        imagePullPolicy: Always
+        name: nodeapp
+        ports:
+        - containerPort: 3000
+        resources: {}
